@@ -1,0 +1,22 @@
+# Todolist API
+
+This is a simple Todolist API project I worked on recently in class. It demonstrates CRUD operations (Create, Read, Update, Delete) using MongoDB as the database, Express.js as the web framework, and JWT for authentication.
+
+## Features
+
+- Create, read, update, and delete todo items
+- User authentication with JWT
+- Data persistence with MongoDB
+
+## Technologies Used
+
+- Node.js
+- Express.js
+- MongoDB
+- JSON Web Tokens (JWT)
+
+## Getting Started
+
+1. Clone the repository.
+2. Run `npm install` to install all required dependencies.
+3. Use Postman (or any API client) to interact with the Todolist API.
