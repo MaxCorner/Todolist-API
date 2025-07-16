@@ -15,4 +15,14 @@ function authenticateToken(req, res, next) {
   });
 }
 
+function checkAdmin(req, res, next) {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(403).json({ error: 'Admin access required' });
+  }
+}
+
+module.exports = checkAdmin;
+
 module.exports = authenticateToken;

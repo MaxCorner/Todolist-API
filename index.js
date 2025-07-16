@@ -2,19 +2,22 @@ const express = require('express');
 require('dotenv').config();
 const { connectToDB, getDB } = require('./data/db');
 
+const app = express();
+
+const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 const todoRoutes = require('./routes/todos');
 
-const app = express();
 const PORT = 3000;
 
 app.use(express.json());
 
+app.use('/admin', adminRoutes);
+app.use('/auth', authRoutes);
+app.use('/todos', todoRoutes);
+
 connectToDB().then(() => {
   app.locals.db = getDB();
-
-  app.use('/auth', authRoutes);
-  app.use('/todos', todoRoutes);
 
   app.get('/', (req, res) => {
     res.send('Welcome to the Todolist API!');

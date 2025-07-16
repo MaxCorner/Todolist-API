@@ -7,8 +7,10 @@ const { ObjectId } = require('mongodb');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 
+const ADMIN_SIGNUP_KEY = process.env.ADMIN_SIGNUP_KEY;
+
 router.post('/signup', async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, adminKey } = req.body;
 
   if (!username || !password)
     return res.status(400).json({ error: 'Missing username or password' });
@@ -22,12 +24,15 @@ router.post('/signup', async (req, res) => {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
+    const isAdmin = adminKey === ADMIN_SIGNUP_KEY;
+
     const result = await db.collection('users').insertOne({
       username,
       passwordHash,
+      isAdmin,
     });
 
-    res.status(201).json({ message: 'User created', userId: result.insertedId });
+    res.status(201).json({ message: 'User created', userId: result.insertedId, isAdmin });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to create user' });
@@ -49,7 +54,11 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
 
     const token = jwt.sign(
-      { userId: user._id.toString(), username: user.username },
+      { 
+        userId: user._id.toString(), 
+        username: user.username,
+        isAdmin: user.isAdmin || false
+      },
       JWT_SECRET,
       { expiresIn: '1d' }
     );
