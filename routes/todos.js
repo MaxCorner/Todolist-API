@@ -6,7 +6,7 @@ const authenticateToken = require('../middleware/auth');
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const db = req.app.locals.db;
-    const todos = await db.collection('todos').find().toArray();
+    const todos = await db.collection('todos').find({ userId: req.user.userId }).toArray();
     res.json(todos);
   } catch (err) {
     console.error(err);
@@ -24,7 +24,8 @@ router.post('/', authenticateToken, async (req, res) => {
     const db = req.app.locals.db;
     const result = await db.collection('todos').insertOne({
       task,
-      completed: false
+      completed: false,
+      userId: req.user.userId
     });
     res.status(201).json({ _id: result.insertedId, task, completed: false });
   } catch (err) {
@@ -54,7 +55,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
     const objectId = new ObjectId(id);
 
     const updateResult = await db.collection('todos').updateOne(
-      { _id: objectId },
+      { _id: objectId, userId: req.user.userId },
       { $set: updateFields }
     );
 
@@ -81,13 +82,13 @@ router.delete('/:id', authenticateToken, async (req, res) => {
     const db = req.app.locals.db;
     const objectId = new ObjectId(id);
 
-    const todo = await db.collection('todos').findOne({ _id: objectId });
+    const todo = await db.collection('todos').findOne({ _id: objectId, userId: req.user.userId });
 
     if (!todo) {
       return res.status(404).json({ error: 'Todo not found' });
     }
 
-    await db.collection('todos').deleteOne({ _id: objectId });
+    await db.collection('todos').deleteOne({ _id: objectId, userId: req.user.userId });
 
     res.json(todo);
   } catch (err) {

@@ -19,4 +19,6 @@ This is a simple Todolist API project I worked on recently in class. It demonstr
 
 1. Clone the repository.
 2. Run `npm install` to install all required dependencies.
-3. Use Postman (or any API client) to interact with the Todolist API.
+3. Run `mongod` to start your MongoDB server.
+4. Run `node index.js` to start your Node.js server.
+5. Use Postman (or any API client) to interact with the Todolist API.

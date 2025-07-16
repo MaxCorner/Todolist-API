@@ -17,7 +17,7 @@ connectToDB().then(() => {
   app.use('/todos', todoRoutes);
 
   app.get('/', (req, res) => {
-    res.send('Welcome to the To-Do API!');
+    res.send('Welcome to the Todolist API!');
   });
 
   app.listen(PORT, () => {
