@@ -22,3 +22,33 @@ This is a simple Todolist API project I worked on recently in class. It demonstr
 3. Run `mongod` to start your MongoDB server.
 4. Run `node index.js` to start your Node.js server.
 5. Use Postman (or any API client) to interact with the Todolist API.
+
+## API Endpoints
+
+### `GET /todos`
+
+- **Description:** Shows all of your todos.
+
+### `GET /admin/dashboard`
+
+- **Description:** Shows all of the users and the todos.
+
+### `PUT /todos/id`
+
+- **Description:** Changes something on a certain todo.
+
+### `DELETE /todos/id`
+
+- **Description:** Delete a certain todo.
+
+### `POST /todos`
+
+- **Description:** Creates a todo.
+
+### `POST /auth/signup`
+
+- **Description:** Creates an account.
+
+### `POST /auth/login`
+
+- **Description:** Login to an account.
