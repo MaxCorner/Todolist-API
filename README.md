@@ -33,13 +33,21 @@ This is a simple Todolist API project I worked on recently in class. It demonstr
 
 - **Description:** Shows all of the users and the todos.
 
+### `PUT /admin/promote/userid`
+
+- **Description:** Promote someone to admin.
+
+### `PUT /admin/demote/userid`
+
+- **Description:** Demote someone from admin.
+
 ### `PUT /todos/id`
 
-- **Description:** Changes something on a certain todo.
+- **Description:** Changes something on a certain todo or if you completed it.
 
 ### `DELETE /todos/id`
 
-- **Description:** Delete a certain todo.
+- **Description:** Deletes a certain todo.
 
 ### `POST /todos`
 
@@ -52,3 +60,7 @@ This is a simple Todolist API project I worked on recently in class. It demonstr
 ### `POST /auth/login`
 
 - **Description:** Login to an account.
+
+### `POST /auth/account`
+
+- **Description:** Change account username or password.

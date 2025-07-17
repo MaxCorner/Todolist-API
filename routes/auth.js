@@ -70,4 +70,53 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.post('/account', async (req, res) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Missing or invalid auth token' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  const { currentPassword, newUsername, newPassword } = req.body;
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userId = new ObjectId(decoded.userId);
+
+    const db = req.app.locals.db;
+    const user = await db.collection('users').findOne({ _id: userId });
+
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const validPassword = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!validPassword) return res.status(401).json({ error: 'Invalid current password' });
+
+    const updateFields = {};
+
+    if (newUsername) {
+      const usernameTaken = await db.collection('users').findOne({ username: newUsername });
+      if (usernameTaken) return res.status(400).json({ error: 'Username taken' });
+      updateFields.username = newUsername;
+    }
+
+    if (newPassword) {
+      const newPasswordHash = await bcrypt.hash(newPassword, 10);
+      updateFields.passwordHash = newPasswordHash;
+    }
+
+    if (Object.keys(updateFields).length === 0) {
+      return res.status(400).json({ error: 'No new data provided' });
+    }
+
+    await db.collection('users').updateOne({ _id: userId }, { $set: updateFields });
+
+    res.json({ message: 'Account updated' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to update account' });
+  }
+});
+
 module.exports = router;
